@@ -4,22 +4,22 @@ using HarmonyLib;
 using System.Reflection;
 using Input = BepInEx.IL2CPP.UnityEngine.Input;
 
-namespace zeprus.sap {
-    public class Sandbox : MonoBehaviour {
+namespace Zeprus.Sap {
+    public class Sandbox : MonoBehaviour, IEvent{
         private static BepInEx.Logging.ManualLogSource log;
 
         public Sandbox(IntPtr ptr) : base(ptr) {
             log = BepInExLoader.log;
+            EventHandler.subscribe(this);
         }
 
-        [HarmonyPatch(typeof(Spacewood.Unity.Lobby), "Awake")]
-        class hookMenu{
+        void lobbyAwake() {
+            log.LogMessage("Called lobbyAwake in Sandbox");
+        }
 
-            //Overwrite achievement button to open console
-            [HarmonyPrefix]
-            public static bool Prefix(ref Spacewood.Unity.Lobby __instance){
-                log.LogMessage(BepInExLoader.GUID + ": Lobby awake");
-                return true;
+        public void eventCalled(MethodInfo methodInfo){
+            if(methodInfo == AccessTools.Method(typeof(Spacewood.Unity.Lobby), "Awake")) {
+                lobbyAwake();
             }
         }
     }

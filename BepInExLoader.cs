@@ -3,7 +3,7 @@ using UnhollowerRuntimeLib;
 using UnityEngine;
 using HarmonyLib;
 
-namespace zeprus.sap {
+namespace Zeprus.Sap {
     [BepInPlugin("com.zeprus.sap_plugin", "SAP Plugin", "0.1")]
     [BepInProcess("Super Auto Pets.exe")]
     public class BepInExLoader : BepInEx.IL2CPP.BasePlugin {
