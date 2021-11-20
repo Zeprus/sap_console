@@ -32,24 +32,17 @@ namespace zeprus.sap {
             log.LogMessage(GUID + ": Registering...");
             
             try {
-                ClassInjector.RegisterTypeInIl2Cpp<Sandbox>();
                 var gameObject = new GameObject("Sandbox");
-                gameObject.AddComponent<Sandbox>();
-                UnityEngine.Object.DontDestroyOnLoad(gameObject);
 
+                ClassInjector.RegisterTypeInIl2Cpp<Sandbox>();
+                gameObject.AddComponent<Sandbox>();
+
+                ClassInjector.RegisterTypeInIl2Cpp<Console>();;
+                gameObject.AddComponent<Console>();
+
+                log.LogMessage(GUID + ": Finished registering.");
             } catch {
                 log.LogError(GUID + ": Failed to register classes.");
-            }
-
-            try {
-                var harmony = new Harmony(GUID);
-
-                var origHangarMainUpdate = AccessTools.Method(typeof(Spacewood.Unity.MonoBehaviours.Build.HangarMain), "Update");
-                var postHangarMainUpdate = AccessTools.Method(typeof(Sandbox), "hangarMainUpdatePostFix");
-                
-                harmony.Patch(origHangarMainUpdate, postfix: new HarmonyMethod(postHangarMainUpdate));
-            } catch {
-                log.LogError(GUID + ": Failed to patch methods.");
             }
         }
     }
