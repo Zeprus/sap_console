@@ -1,6 +1,6 @@
 # Zeprus' SAP Mod
 ## Features
-* Open developer console by ctrl clicking the Achievements button
+* Open developer console by ctrl clicking the Achievements button 10 times
 
 ## Installation
 1. Download the latest BepInEx Build from [here](https://builds.bepis.io/projects/bepinex_be).
