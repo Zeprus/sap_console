@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using HarmonyLib;
 using System.Reflection;
 using Input = BepInEx.IL2CPP.UnityEngine.Input;
@@ -7,13 +8,16 @@ using Input = BepInEx.IL2CPP.UnityEngine.Input;
 namespace Zeprus.Sap {
     public class Console : MonoBehaviour, IEvent {
         private static BepInEx.Logging.ManualLogSource log;
-        MethodInfo startConsole = AccessTools.Method(typeof(Spacewood.Unity.Menu), "StartConsole");
         public static Spacewood.Unity.Menu menu;
         public static Spacewood.Unity.Lobby lobby;
+        public static Il2CppSystem.Action<Spacewood.Unity.UI.SelectableBase> achievementPressedAction;
         
         public Console(IntPtr ptr) : base(ptr) {
             log = BepInExLoader.log;
             EventHandler.subscribe(this);
+            achievementPressedAction = new Action<Spacewood.Unity.UI.SelectableBase>((selectableBase) => {
+                achievementOnClick(selectableBase);
+            });
         }
 
         public void hangarMainUpdatePostFix() {
@@ -24,16 +28,17 @@ namespace Zeprus.Sap {
             log.LogMessage("Called lobbyAwake in Console");
         }
 
-        public void eventCalled(MethodInfo methodInfo) {
-            if(methodInfo == AccessTools.Method(typeof(Spacewood.Unity.Lobby), "Awake")) {
-                lobbyAwake();
+        public static void achievementOnClick(Spacewood.Unity.UI.SelectableBase button) {
+            if(Input.GetKeyInt(BepInEx.IL2CPP.UnityEngine.KeyCode.LeftControl)) {
+                menu.StartConsole();
+            }   else {
+                menu.StartAchievements();
             }
         }
 
-        public void lobbyUpdatePostFix() {
-            log.LogMessage("Updating..");
-            if(Input.GetKeyInt(BepInEx.IL2CPP.UnityEngine.KeyCode.F1) && Event.current.type == EventType.KeyDown) {
-                log.LogMessage("Registered button press");
+        public void eventCalled(MethodInfo methodInfo) {
+            if(methodInfo == AccessTools.Method(typeof(Spacewood.Unity.Lobby), "Awake")) {
+                lobbyAwake();
             }
         }
 
@@ -43,7 +48,8 @@ namespace Zeprus.Sap {
             public static void Postfix(ref Spacewood.Unity.Menu __instance){
                 log.LogMessage("Start");
                 Console.menu = __instance;
-                //Console.lobby = __instance.Lobby;
+                Console.lobby = __instance.Lobby;
+                Console.lobby.AchievementsButton.OnSubmit = achievementPressedAction;
             }
         }
     }
