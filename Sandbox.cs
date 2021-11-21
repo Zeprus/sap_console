@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using HarmonyLib;
 using System.Reflection;
+using Spacewood.Unity;
 using Input = BepInEx.IL2CPP.UnityEngine.Input;
 
 namespace Zeprus.Sap {
@@ -10,6 +11,7 @@ namespace Zeprus.Sap {
         public static Spacewood.Unity.Menu menu;
         public static Spacewood.Unity.Lobby lobby;
         public static Spacewood.Unity.PlayBox playbox;
+        public static Spacewood.Unity.PageManager pageManager;
 
         public static Il2CppSystem.Action<Spacewood.Unity.UI.SelectableBase> playButtonSubmitAction;
         public static Il2CppSystem.Action<Spacewood.Unity.UI.SelectableBase> continueButtonSubmitAction;
@@ -29,6 +31,7 @@ namespace Zeprus.Sap {
 
         void menuStart(Spacewood.Unity.Menu __instance) {
             Sandbox.menu = __instance;
+            Sandbox.pageManager = __instance.PageManager;
             Sandbox.lobby = __instance.Lobby;
             Sandbox.playbox = lobby.playBox;
             Sandbox.playbox.PlayButton.OnSubmit = playButtonSubmitAction;
@@ -37,20 +40,20 @@ namespace Zeprus.Sap {
 
         void playOnSubmit(Spacewood.Unity.UI.SelectableBase button) {
             if(Input.GetKeyInt(BepInEx.IL2CPP.UnityEngine.KeyCode.LeftControl)) {
-                startSandbox();
+                startSandbox(button);
             }   else {
                 playbox.HandlePlay(button);
             }
         }
         void continueOnSubmit(Spacewood.Unity.UI.SelectableBase button) {
             if(Input.GetKeyInt(BepInEx.IL2CPP.UnityEngine.KeyCode.LeftControl)) {
-                startSandbox();
+                startSandbox(button);
             }   else {
                 playbox.HandleContinue(button);
             }
         }
 
-        void startSandbox() {
+        void startSandbox(Spacewood.Unity.UI.SelectableBase button) {
             log.LogMessage("This should start the sandbox at some point...");
             //TODO: start Sandbox
         }
