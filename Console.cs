@@ -10,25 +10,24 @@ namespace Zeprus.Sap {
         private static BepInEx.Logging.ManualLogSource log;
         public static Spacewood.Unity.Menu menu;
         public static Spacewood.Unity.Lobby lobby;
-        public static Il2CppSystem.Action<Spacewood.Unity.UI.SelectableBase> achievementPressedAction;
+        public static Il2CppSystem.Action<Spacewood.Unity.UI.SelectableBase> achievementButtonSubmitAction;
         
         public Console(IntPtr ptr) : base(ptr) {
             log = BepInExLoader.log;
             EventHandler.subscribe(this);
-            achievementPressedAction = new Action<Spacewood.Unity.UI.SelectableBase>((selectableBase) => {
-                achievementOnClick(selectableBase);
+            
+            achievementButtonSubmitAction = new Action<Spacewood.Unity.UI.SelectableBase>((selectableBase) => {
+                achievementOnSubmit(selectableBase);
             });
         }
 
-        public void hangarMainUpdatePostFix() {
-
+        void menuStart(Spacewood.Unity.Menu __instance){
+            Console.menu = __instance;
+            Console.lobby = __instance.Lobby;
+            Console.lobby.AchievementsButton.OnSubmit = achievementButtonSubmitAction;
         }
 
-        void lobbyAwake() {
-            log.LogMessage("Called lobbyAwake in Console");
-        }
-
-        public static void achievementOnClick(Spacewood.Unity.UI.SelectableBase button) {
+        public static void achievementOnSubmit(Spacewood.Unity.UI.SelectableBase button) {
             if(Input.GetKeyInt(BepInEx.IL2CPP.UnityEngine.KeyCode.LeftControl)) {
                 menu.StartConsole();
             }   else {
@@ -36,20 +35,10 @@ namespace Zeprus.Sap {
             }
         }
 
-        public void eventCalled(MethodInfo methodInfo) {
-            if(methodInfo == AccessTools.Method(typeof(Spacewood.Unity.Lobby), "Awake")) {
-                lobbyAwake();
-            }
-        }
-
-        [HarmonyPatch(typeof(Spacewood.Unity.Menu), "Start")]
-        class menuStart{
-            [HarmonyPrefix]
-            public static void Postfix(ref Spacewood.Unity.Menu __instance){
-                log.LogMessage("Start");
-                Console.menu = __instance;
-                Console.lobby = __instance.Lobby;
-                Console.lobby.AchievementsButton.OnSubmit = achievementPressedAction;
+        public void eventCalled(MethodInfo methodInfo, object __instance) {
+            if(methodInfo == AccessTools.Method(typeof(Spacewood.Unity.Menu), "Start")) {
+                menuStart((Spacewood.Unity.Menu) __instance);
+                return;
             }
         }
     }
