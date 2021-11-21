@@ -15,7 +15,7 @@ namespace Zeprus.Sap {
         public Console(IntPtr ptr) : base(ptr) {
             log = BepInExLoader.log;
             EventHandler.subscribe(this);
-            
+
             achievementButtonSubmitAction = new Action<Spacewood.Unity.UI.SelectableBase>((selectableBase) => {
                 achievementOnSubmit(selectableBase);
             });
@@ -35,7 +35,7 @@ namespace Zeprus.Sap {
             }
         }
 
-        public void eventCalled(MethodInfo methodInfo, object __instance) {
+        public void eventCalled(MethodInfo methodInfo, ref object __instance) {
             if(methodInfo == AccessTools.Method(typeof(Spacewood.Unity.Menu), "Start")) {
                 menuStart((Spacewood.Unity.Menu) __instance);
                 return;

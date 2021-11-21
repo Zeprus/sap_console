@@ -9,35 +9,53 @@ namespace Zeprus.Sap {
         private static BepInEx.Logging.ManualLogSource log;
         public static Spacewood.Unity.Menu menu;
         public static Spacewood.Unity.Lobby lobby;
+        public static Spacewood.Unity.PlayBox playbox;
 
-        public static Il2CppSystem.Action<Spacewood.Unity.UI.SelectableBase> customizeButtonSubmitAction;
+        public static Il2CppSystem.Action<Spacewood.Unity.UI.SelectableBase> playButtonSubmitAction;
+        public static Il2CppSystem.Action<Spacewood.Unity.UI.SelectableBase> continueButtonSubmitAction;
 
 
         public Sandbox(IntPtr ptr) : base(ptr) {
             log = BepInExLoader.log;
             EventHandler.subscribe(this);
 
-            customizeButtonSubmitAction = new Action<Spacewood.Unity.UI.SelectableBase>((selectableBase) => {
-                customizeOnSubmit(selectableBase);
+            playButtonSubmitAction = new Action<Spacewood.Unity.UI.SelectableBase>((selectableBase) => {
+                playOnSubmit(selectableBase);
+            });
+            continueButtonSubmitAction = new Action<Spacewood.Unity.UI.SelectableBase>((selectableBase) => {
+                continueOnSubmit(selectableBase);
             });
         }
 
         void menuStart(Spacewood.Unity.Menu __instance) {
-            Console.menu = __instance;
-            Console.lobby = __instance.Lobby;
-            Console.lobby.CustomizeButton.OnSubmit = customizeButtonSubmitAction;
+            Sandbox.menu = __instance;
+            Sandbox.lobby = __instance.Lobby;
+            Sandbox.playbox = lobby.playBox;
+            Sandbox.playbox.PlayButton.OnSubmit = playButtonSubmitAction;
+            Sandbox.playbox.ContinueButton.OnSubmit = continueButtonSubmitAction;
         }
 
-        void customizeOnSubmit(Spacewood.Unity.UI.SelectableBase button) {
+        void playOnSubmit(Spacewood.Unity.UI.SelectableBase button) {
             if(Input.GetKeyInt(BepInEx.IL2CPP.UnityEngine.KeyCode.LeftControl)) {
-                log.LogMessage("Ctrl-clicked customize button!");
-                //TODO: Start sandbox
+                startSandbox();
             }   else {
-                menu.StartCustomize();
+                playbox.HandlePlay(button);
+            }
+        }
+        void continueOnSubmit(Spacewood.Unity.UI.SelectableBase button) {
+            if(Input.GetKeyInt(BepInEx.IL2CPP.UnityEngine.KeyCode.LeftControl)) {
+                startSandbox();
+            }   else {
+                playbox.HandleContinue(button);
             }
         }
 
-        public void eventCalled(MethodInfo methodInfo, object __instance){
+        void startSandbox() {
+            log.LogMessage("This should start the sandbox at some point...");
+            //TODO: start Sandbox
+        }
+
+        public void eventCalled(MethodInfo methodInfo, ref object __instance){
             if(methodInfo == AccessTools.Method(typeof(Spacewood.Unity.Menu), "Start")) {
                 menuStart((Spacewood.Unity.Menu) __instance);
                 return;

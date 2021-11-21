@@ -6,7 +6,7 @@ using System.Reflection;
 namespace Zeprus.Sap {
 
     public interface IEvent {
-        public void eventCalled(MethodInfo methodinfo, object __instance);
+        public void eventCalled(MethodInfo methodinfo, ref object __instance);
     }
 
     public static class EventHandler {
@@ -23,9 +23,9 @@ namespace Zeprus.Sap {
         [HarmonyPatch(typeof(Spacewood.Unity.Menu), "Start")]
         class menuStart{
             [HarmonyPrefix]
-            public static void Postfix(ref Spacewood.Unity.Menu __instance){
+            public static void Postfix(ref object __instance){
                 foreach (IEvent subscriber in subscribers) {
-                    subscriber.eventCalled(AccessTools.Method(typeof(Spacewood.Unity.Menu), "Start"), __instance);
+                    subscriber.eventCalled(AccessTools.Method(typeof(Spacewood.Unity.Menu), "Start"), ref __instance);
                 }
             }
         }
