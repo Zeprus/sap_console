@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>sap_sandbox</AssemblyName>
-    <Description>Zeprus' SAP Sandbox</Description>
+    <AssemblyName>sap_console</AssemblyName>
+    <Description>Zeprus' SAP Console Enabler</Description>
     <Version>0.1</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>9.0</LangVersion>

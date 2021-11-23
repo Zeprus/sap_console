@@ -1,4 +1,3 @@
-using BepInEx;
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection;
@@ -6,7 +5,7 @@ using System.Reflection;
 namespace Zeprus.Sap {
 
     public interface IEvent {
-        public void eventCalled(MethodInfo methodinfo);
+        public void eventCalled(MethodInfo methodinfo, ref object __instance);
     }
 
     public static class EventHandler {
@@ -20,12 +19,12 @@ namespace Zeprus.Sap {
             subscribers.Remove(subscriber);
         }
 
-        [HarmonyPatch(typeof(Spacewood.Unity.Lobby), "Awake")]
-        class hookMenu {
+        [HarmonyPatch(typeof(Spacewood.Unity.Menu), "Start")]
+        class menuStart{
             [HarmonyPrefix]
-            public static void Prefix(ref Spacewood.Unity.Lobby __instance){
+            public static void Postfix(ref object __instance){
                 foreach (IEvent subscriber in subscribers) {
-                    subscriber.eventCalled(AccessTools.Method(typeof(Spacewood.Unity.Lobby), "Awake"));
+                    subscriber.eventCalled(AccessTools.Method(typeof(Spacewood.Unity.Menu), "Start"), ref __instance);
                 }
             }
         }
