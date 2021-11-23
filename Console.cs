@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using HarmonyLib;
 using System.Reflection;
 using Input = BepInEx.IL2CPP.UnityEngine.Input;
