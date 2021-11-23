@@ -19,7 +19,7 @@ namespace Zeprus.Sap {
             log = Log;
 
             try{
-                Harmony harmonyInstance = new Harmony("zeprus.sap_plugin");
+                Harmony harmonyInstance = new Harmony("zeprus.sap_console");
                 harmonyInstance.PatchAll();
             } catch(HarmonyException e) {
                 log.LogError(e.ToString());
