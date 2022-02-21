@@ -21,7 +21,7 @@ namespace Zeprus.Sap {
 
         [HarmonyPatch(typeof(Spacewood.Unity.Menu), "Start")]
         class menuStart{
-            [HarmonyPrefix]
+            [HarmonyPostfix]
             public static void Postfix(ref object __instance){
                 foreach (IEvent subscriber in subscribers) {
                     subscriber.eventCalled(AccessTools.Method(typeof(Spacewood.Unity.Menu), "Start"), ref __instance);
