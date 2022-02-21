@@ -4,74 +4,91 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>sap_console</AssemblyName>
     <Description>Zeprus' SAP Console Enabler</Description>
-    <Version>0.1</Version>
+    <Version>1.1</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
+
+    <PropertyGroup Label="Variables">
+    <GameDir>E:\SteamLibrary\steamapps\common\Super Auto Pets</GameDir>
+    <BepInExDir>$(GameDir)\BepInEx</BepInExDir>
+  </PropertyGroup>
+
+
 
   <ItemGroup>
     <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+  </ItemGroup>
+
+  <ItemGroup Label="Libraries">
     <Reference Include="0Harmony">
-      <HintPath>lib\core\0Harmony.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.Core">
-      <HintPath>lib\core\BepInEx.Core.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\BepInEx.Core.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx.IL2CPP">
-      <HintPath>lib\core\BepInEx.IL2CPP.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\BepInEx.IL2CPP.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
-      <HintPath>lib\core\Mono.Cecil.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Mdb">
-      <HintPath>lib\core\Mono.Cecil.Mdb.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\Mono.Cecil.Mdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Pdb">
-      <HintPath>lib\core\Mono.Cecil.Pdb.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\Mono.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil.Rocks">
-      <HintPath>lib\core\Mono.Cecil.Rocks.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\Mono.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="UnhollowerBaseLib">
-      <HintPath>lib\core\UnhollowerBaseLib.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\UnhollowerBaseLib.dll</HintPath>
     </Reference>
     <Reference Include="UnhollowerRuntimeLib">
-      <HintPath>lib\core\UnhollowerRuntimeLib.dll</HintPath>
+      <HintPath>$(BepInExDir)\core\UnhollowerRuntimeLib.dll</HintPath>
     </Reference>
 
     <Reference Include="Assembly-CSharp">
-      <HintPath>lib\unhollowed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Il2Cppmscorlib">
-      <HintPath>lib\unhollowed\Il2Cppmscorlib.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\Il2Cppmscorlib.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem.Core">
-      <HintPath>lib\unhollowed\Il2CppSystem.Core.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\Il2CppSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem">
-      <HintPath>lib\unhollowed\Il2CppSystem.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\Il2CppSystem.dll</HintPath>
     </Reference>
     <Reference Include="Il2CppSystem.Xml">
-      <HintPath>lib\unhollowed\Il2CppSystem.Xml.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\Il2CppSystem.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="UniTask">
+      <HintPath>$(BepInExDir)\unhollowed\UniTask.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>lib\unhollowed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>lib\unhollowed\UnityEngine.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>lib\unhollowed\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\UnityEngine.IMGUIModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>lib\unhollowed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>lib\unhollowed\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>lib\unhollowed\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>$(BepInExDir)\unhollowed\UnityEngine.UIModule.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <Target Name="Deploy" AfterTargets="Publish">
+    <Exec Command='deploy.bat "$(GameDir)\BepInEx\plugins\"'/>
+  </Target>
 </Project>

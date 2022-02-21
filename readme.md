@@ -7,8 +7,11 @@
 1. Download the latest BepInEx Build from [here](https://builds.bepis.io/projects/bepinex_be).
 2. Follow the installation instructions for Il2Cpp Unity [here](https://docs.bepinex.dev/master/articles/user_guide/installation/unity_il2cpp.html).
 3. Download the latest release [here](https://github.com/Zeprus/sap_sandbox/releases).
-4. Move it to Steam\steamapps\common\Super Auto Pets\BepInEx\plugins\
+4. Move it to "Super Auto Pets\BepInEx\plugins\"
 
 ## Development
-If you want to continue working on this project make sure to check [the project file](https://github.com/Zeprus/twitch_plays_sap/blob/main/twitch_plays_sap.csproj) for the dependencies.
-You can aquire the required libraries from the unhollowed and core directory in /Super Auto Pets/BepInEx after running the game with it for the first time.
+If you want to continue working on this project make sure to check [the project file](https://github.com/Zeprus/sap_console/blob/main/sap_console.csproj) and set the GameDir property to the root directory of your Super Auto Pets installation.
+
+Build the project with 'dotnet publish' for automatic deployment.
+
+If you are running into unresolved references during build you most likely did not configure the GameDir correctly forgot to run BepInEx once.
